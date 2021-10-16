@@ -1,6 +1,16 @@
 var express = require('express');
+var ProductController = require('../controllers/ProductController');
+var productImageUpload = require('../middlewares/multer.config');
 var router = express.Router();
 
-router.get('/')
+router.get('/', ProductController.list);
+
+router.get('/:id' , ProductController.show);
+
+router.post('/', productImageUpload, ProductController.create);
+
+router.put('/:id', productImageUpload,  ProductController.update);
+
+router.delete('/:id' , ProductController.remove);
 
 module.exports = router;
