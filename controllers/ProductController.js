@@ -49,18 +49,11 @@ module.exports = {
       return res.status(500).json({
         status : 500,
         message : 'Product Image Required'
-
-
       })
     }
-    const product = JSON.parse(req.product.body);
+
+    const product = JSON.parse(req.body.product);
     delete product._id;
-    if(!req.file){
-      return res.status(500).json({
-        status : 500,
-        message : "Product Image Required"
-      })
-    }
 
     let Product = new ProductModel({
       ...product,
@@ -68,6 +61,7 @@ module.exports = {
     });
     
     Product.save((err, Product) => {
+      console.log('Saved');
       if (err) {
         return res.status(500).json({
           message: 'Error when creating Product',
@@ -82,7 +76,7 @@ module.exports = {
   },
   update: (req,res) =>{
     const id = req.params.id;
-    var product = JSON.parse(req.body.product)
+    var product = JSON.parse(req.body.product);
 
     if(req.file) {
       product.image = `${req.protocol}://${req.get('host')}/images/products/${req.file.filename}`;
@@ -101,19 +95,19 @@ module.exports = {
 
       })
     }
-      
-    ProductModel.updateOne({_id : id} , {...product, _id}, (err, data) =>{
+
+    ProductModel.updateOne({_id: id}, product, (err, data) =>{
       if(err){
         return res.status(500).json({
-          status : 500,
-          message : 'Error when updating Product',
-          error : err
+          status: 500,
+          message: 'Error when updating Product',
+          error: err
         })
       }
 
       return res.status(200).json({
-        status : 200,
-        product : product
+        status: 200,
+        product: product
       })
       
     });
